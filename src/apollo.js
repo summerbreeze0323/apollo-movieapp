@@ -6,6 +6,19 @@ const client = new ApolloClient({
   resolvers: {
     Movie: {
       isLiked: () => false
+    },
+    Mutation: {
+      likeMovie: (_, { id }, { cache }) => {
+        cache.modify({
+          id: cache.identify({
+            __typename: 'Movie',
+            id: id,
+          }),
+          fields: {
+            isLiked: (isLiked) => !isLiked
+          }
+        })
+      }
     }
   }
 });
